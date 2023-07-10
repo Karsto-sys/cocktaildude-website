@@ -1,15 +1,13 @@
-var gulp = require("gulp");
-var livereload = require('gulp-livereload');
+var gulp = require('gulp');
+var superstatic = require('superstatic');
+var browserSync = require('browser-sync').create();
 
-//Directory configuration
-//You can add any new path at any part of the array
-//folder/*.extension
-
-var directories = ["./*.html", "js/*.js", "css/*.css"];
-
-gulp.task('default', [], function() {
-	livereload.listen();
-	gulp.watch(directories, function(){
-		gulp.src(directories).pipe(livereload());
-	});
+gulp.task('serve', function() {
+  browserSync.init({
+    server: {
+      baseDir: 'public',
+      middleware: [superstatic({stack: 'strict'})]
+    }
+  });
+  gulp.watch('public/*.html').on('change', browserSync.reload);
 });
